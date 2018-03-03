@@ -112,6 +112,7 @@ public class Hangman implements KeyListener {
 		removeBoxes();
 		createBoxes();
 		clearBoxes();
+		JOptionPane.showMessageDialog(null, "press enter to continue");
 	}
 	
 	public void removeBoxes() {
