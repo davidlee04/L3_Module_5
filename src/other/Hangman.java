@@ -1,6 +1,8 @@
 package other;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -11,17 +13,19 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class Hangman implements KeyListener {
+public class Hangman implements KeyListener, ActionListener {
 	Stack<String> wordStack = new Stack<>();
 	ArrayList<JLabel> boxes = new ArrayList<>();
 	JFrame frame;
 	JPanel panel;
 	JLabel lives;
+	JButton guessWord;
 
 	String word = "";
 	int lifeCount = 9;
@@ -50,7 +54,11 @@ public class Hangman implements KeyListener {
 			panel.add(boxes.get(i));
 		}
 		lives = new JLabel();
+		guessWord = new JButton();
 		panel.add(lives);
+		panel.add(guessWord);
+		guessWord.setText("Guess the Word!");
+		guessWord.addActionListener(this);
 		lives.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
 		lives.setText(lifeCount + "");
 		frame.addKeyListener(this);
@@ -97,8 +105,16 @@ public class Hangman implements KeyListener {
 
 	void checkAnswer() {
 		if (getCurrentAnswer().equals(word)) {
-			JOptionPane.showMessageDialog(null, "congrats");
 			loadNextPuzzle();
+			JOptionPane.showMessageDialog(null, "congrats");
+		}
+		System.out.println(getCurrentAnswer());
+	}
+	
+	void checkGuess(String a) {
+		if (a.equalsIgnoreCase(word)) {
+			loadNextPuzzle();
+			JOptionPane.showMessageDialog(null, "congrats");
 		}
 		System.out.println(getCurrentAnswer());
 	}
@@ -113,10 +129,11 @@ public class Hangman implements KeyListener {
 
 	public void loadNextPuzzle() {
 		word = wordStack.pop();
+		
 		removeBoxes();
 		createBoxes();
+		
 		clearBoxes();
-		JOptionPane.showMessageDialog(null, "press enter to continue");
 	}
 
 	public void removeBoxes() {
@@ -135,7 +152,7 @@ public class Hangman implements KeyListener {
 		lifeCount = 9;
 		panel.add(lives);
 		lives.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
-		lives.setText(lifeCount + "");
+		updateLives();
 	}
 
 	public void clearBoxes() {
@@ -190,6 +207,15 @@ public class Hangman implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		if(arg0.getSource() == guessWord) {
+			String input = JOptionPane.showInputDialog("Please input your entire guess.");
+			checkGuess(input);
+		}
 	}
 
 }
