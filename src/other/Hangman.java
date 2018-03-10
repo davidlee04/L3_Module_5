@@ -55,6 +55,7 @@ public class Hangman implements KeyListener, ActionListener {
 		}
 		lives = new JLabel();
 		guessWord = new JButton();
+		guessWord.setFocusable(false);
 		panel.add(lives);
 		panel.add(guessWord);
 		guessWord.setText("Guess the Word!");
@@ -163,13 +164,19 @@ public class Hangman implements KeyListener, ActionListener {
 
 	public void playDeathKnell() {
 		try {
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(""));
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("/Users/League/Google Drive/league-sounds/funeral-march.wav"));
 			Clip clip = AudioSystem.getClip();
 			clip.open(audioInputStream);
 			clip.start();
 			Thread.sleep(8400);
 		} catch (Exception ex) {
 			ex.printStackTrace();
+		}
+	}
+	
+	public void checkLives() { 
+		if(lifeCount == 0) {
+			playDeathKnell();
 		}
 	}
 
@@ -181,6 +188,7 @@ public class Hangman implements KeyListener, ActionListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		System.out.println("hi");
 		// TODO Auto-generated method stub
 		charArray = word.toCharArray();
 
@@ -198,6 +206,7 @@ public class Hangman implements KeyListener, ActionListener {
 			lifeCount--;
 			updateLives();
 			JOptionPane.showMessageDialog(null, "wrong :(");
+			checkLives();
 		}
 
 		strikeCount = 0;
