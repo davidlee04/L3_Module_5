@@ -16,6 +16,7 @@ public class TestMatchingBrackets {
 		assertTrue(doBracketsMatch("{}{}{{}}"));
 		assertFalse(doBracketsMatch("{{}"));
 		assertFalse(doBracketsMatch("}{"));
+		assertFalse(doBracketsMatch("{}{}}}{{"));
 	}
 
 	// USE A STACK TO COMPLETE THE METHOD FOR CHECKING IF EVERY OPENING BRACKET HAS
@@ -38,7 +39,12 @@ public class TestMatchingBrackets {
 		for (int j = b.length() - 1; j >= 0; j--) {
 			charStack.push(b.charAt(j));
 		}
+		
 		if (charStack.pop() == '{') {
+			for (int i = charStack.size()-1; i >= 0; i--) {
+				
+			}
+			
 			if(openBracketCount == closedBracketCount) {
 				return true;
 			} else {
